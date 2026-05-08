@@ -1,0 +1,18 @@
+{
+  "simplecoords.config.enabled": "Enable HUD",
+  "simplecoords.config.enabled.tooltip": "Whether the SimpleCoords HUD should be displayed on screen.",
+  "simplecoords.config.use_camera": "Consider Freecam Coords",
+  "simplecoords.config.use_camera.tooltip": "If enabled, the HUD will show the camera's coordinates (useful for Freecam). If disabled, it always shows the player's body coordinates.",
+  "simplecoords.config.show_xyz": "Show XYZ",
+  "simplecoords.config.show_xyz.tooltip": "Display the X, Y, and Z coordinates.",
+  "simplecoords.config.show_subchunk": "Show Subchunk",
+  "simplecoords.config.show_subchunk.tooltip": "Display relative subchunk coordinates (0-15).",
+  "simplecoords.config.show_facing": "Show Facing",
+  "simplecoords.config.show_facing.tooltip": "Display the cardinal direction you are facing.",
+  "simplecoords.config.precision": "Coordinate Precision",
+  "simplecoords.config.precision.tooltip": "Number of decimal places for XYZ coordinates (0 for whole numbers).",
+  "simplecoords.config.x": "HUD X Position",
+  "simplecoords.config.x.tooltip": "The horizontal position of the HUD.",
+  "simplecoords.config.y": "HUD Y Position",
+  "simplecoords.config.y.tooltip": "The vertical position of the HUD."
+}
