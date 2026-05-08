@@ -17,9 +17,6 @@ public class HUDEditorScreen extends Screen {
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // Draw a semi-transparent background to indicate we are in an editor
-        guiGraphics.fill(0, 0, this.width, this.height, 0x44000000);
-        
         // Draw some instructions
         guiGraphics.drawCenteredString(this.font, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
         guiGraphics.drawCenteredString(this.font, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
@@ -28,6 +25,13 @@ public class HUDEditorScreen extends Screen {
         CoordsHUDOverlay.renderHUD(guiGraphics, 123.456, 64.0, 789.012, "NORTH", Config.HUD_X.get(), Config.HUD_Y.get());
 
         super.render(guiGraphics, mouseX, mouseY, partialTick);
+    }
+
+    @Override
+    public void renderTransparentBackground(GuiGraphics guiGraphics) {
+        // Overriding this and doing nothing removes the blur and the darkening.
+        // If we want a slight darkening without blur, we would fill a color here.
+        // But for a HUD editor, seeing the game clearly is better.
     }
 
     @Override
