@@ -1,11 +1,9 @@
 package com.fayber.simplecoords;
 
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.DeltaTracker;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
 
 public class CoordsHUDOverlay {
 
@@ -19,24 +17,11 @@ public class CoordsHUDOverlay {
             return;
         }
 
-        double x, y, z;
-        String facing;
+        // Use the camera entity (e.g., the Freecam ghost) if enabled, otherwise use the player.
+        // We use the entity's position directly (feet level) to match the F3 screen's XYZ line.
+        Entity target = (Config.USE_CAMERA.get() && mc.getCameraEntity() != null) ? mc.getCameraEntity() : mc.player;
 
-        if (Config.USE_CAMERA.get()) {
-            Camera camera = mc.gameRenderer.getMainCamera();
-            Vec3 pos = camera.getPosition();
-            x = pos.x;
-            y = pos.y;
-            z = pos.z;
-            facing = Direction.orderedByNearest(camera.getEntity()).length > 0 ? Direction.fromYRot(camera.getYRot()).getName().toUpperCase() : "UNKNOWN";
-        } else {
-            x = mc.player.getX();
-            y = mc.player.getY();
-            z = mc.player.getZ();
-            facing = mc.player.getDirection().getName().toUpperCase();
-        }
-
-        renderHUD(guiGraphics, x, y, z, facing, Config.HUD_X.get(), Config.HUD_Y.get());
+        renderHUD(guiGraphics, target.getX(), target.getY(), target.getZ(), target.getDirection().getName().toUpperCase(), Config.HUD_X.get(), Config.HUD_Y.get());
     }
 
     public static void renderHUD(GuiGraphics guiGraphics, double x, double y, double z, String facing, int xPos, int yPos) {
