@@ -1,29 +1,21 @@
 package com.fayber.simplecoords;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import net.minecraft.resources.ResourceLocation;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Mod(SimpleCoords.MODID)
-public class SimpleCoords {
+public class SimpleCoords implements ClientModInitializer {
     public static final String MODID = "simplecoords";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public SimpleCoords(IEventBus modEventBus, ModContainer modContainer) {
-        // Register the configuration
-        modContainer.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
-
-        // Register the CUSTOM config screen
-        modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, parent) -> new CustomConfigScreen(modContainer, parent));
-
-        // Register the HUD layer
-        modEventBus.addListener(this::registerGuiLayers);
-    }
-
-    private void registerGuiLayers(RegisterGuiLayersEvent event) {
-        event.registerAboveAll(ResourceLocation.fromNamespaceAndPath(MODID, "coords_hud"), CoordsHUDOverlay::render);
+    @Override
+    public void onInitializeClient() {
+        Config.load();
+        
+        HudRenderCallback.EVENT.register(CoordsHUDOverlay::render);
+        ClientCommandHandler.register();
+        
+        LOGGER.info("SimpleCoordsHUD initialized!");
     }
 }

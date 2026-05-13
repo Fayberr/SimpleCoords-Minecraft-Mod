@@ -1,49 +1,49 @@
 package com.fayber.simplecoords;
 
-import net.neoforged.neoforge.common.ModConfigSpec;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Config {
-    private static final ModConfigSpec.Builder BUILDER = new ModConfigSpec.Builder();
+    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "simplecoords.json");
 
-    public static final ModConfigSpec.BooleanValue ENABLED = BUILDER
-            .comment("Overall toggle for the HUD")
-            .translation("simplecoords.config.enabled")
-            .define("enabled", true);
+    public static Data data = new Data();
 
-    public static final ModConfigSpec.BooleanValue USE_CAMERA = BUILDER
-            .comment("Use camera coordinates instead of player coordinates (useful for Freecam)")
-            .translation("simplecoords.config.use_camera")
-            .define("use_camera", true);
+    public static class Data {
+        public boolean enabled = true;
+        public boolean use_camera = true;
+        public boolean show_xyz = true;
+        public boolean show_subchunk = true;
+        public boolean show_facing = true;
+        public int precision = 3;
+        public int hud_x = 5;
+        public int hud_y = 5;
+    }
 
-    public static final ModConfigSpec.BooleanValue SHOW_XYZ = BUILDER
-            .comment("Show the XYZ coordinates")
-            .translation("simplecoords.config.show_xyz")
-            .define("show_xyz", true);
+    public static void load() {
+        if (CONFIG_FILE.exists()) {
+            try (FileReader reader = new FileReader(CONFIG_FILE)) {
+                data = GSON.fromJson(reader, Data.class);
+                if (data == null) data = new Data();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            save();
+        }
+    }
 
-    public static final ModConfigSpec.BooleanValue SHOW_SUBCHUNK = BUILDER
-            .comment("Show the subchunk coordinates")
-            .translation("simplecoords.config.show_subchunk")
-            .define("show_subchunk", true);
-
-    public static final ModConfigSpec.BooleanValue SHOW_FACING = BUILDER
-            .comment("Show the facing direction")
-            .translation("simplecoords.config.show_facing")
-            .define("show_facing", true);
-
-    public static final ModConfigSpec.IntValue COORD_PRECISION = BUILDER
-            .comment("Number of decimal places for coordinates (0-5)")
-            .translation("simplecoords.config.precision")
-            .defineInRange("precision", 3, 0, 5);
-
-    public static final ModConfigSpec.IntValue HUD_X = BUILDER
-            .comment("X position of the HUD")
-            .translation("simplecoords.config.x")
-            .defineInRange("hud_x", 5, 0, 4000);
-
-    public static final ModConfigSpec.IntValue HUD_Y = BUILDER
-            .comment("Y position of the HUD")
-            .translation("simplecoords.config.y")
-            .defineInRange("hud_y", 5, 0, 4000);
-
-    static final ModConfigSpec SPEC = BUILDER.build();
+    public static void save() {
+        try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
+            GSON.toJson(data, writer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

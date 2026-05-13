@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "simplecoords",
+  "version": "${version}",
+  "name": "SimpleCoords",
+  "description": "A simple and clean HUD that displays your coordinates and facing direction.",
+  "authors": [
+    "Fayber"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Fayberr/SimpleCoords-Minecraft-Mod"
+  },
+  "license": "GPL-3.0-or-later",
+  "icon": "assets/simplecoords/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.fayber.simplecoords.SimpleCoords"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "1.21.10",
+    "java": ">=21",
+    "fabric-api": "*"
+  }
+}

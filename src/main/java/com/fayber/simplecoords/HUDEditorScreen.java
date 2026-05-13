@@ -1,8 +1,9 @@
 package com.fayber.simplecoords;
 
-import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
+import net.minecraft.client.gui.Click;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.text.Text;
 
 public class HUDEditorScreen extends Screen {
     private final Screen parent;
@@ -11,73 +12,69 @@ public class HUDEditorScreen extends Screen {
     private double dragOffsetY = 0;
 
     public HUDEditorScreen(Screen parent) {
-        super(Component.literal("HUD Editor"));
+        super(Text.literal("HUD Editor"));
         this.parent = parent;
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        // 1. Render the background (includes the vanilla blur and darkening)
-        // super.render will call renderBackground/renderTransparentBackground
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+    public void render(DrawContext drawContext, int mouseX, int mouseY, float partialTick) {
+        super.render(drawContext, mouseX, mouseY, partialTick);
 
-        // 2. Render our UI elements AFTER super.render() so they are drawn on top of the blur
+        CoordsHUDOverlay.renderHUD(drawContext, 123.456, 64.0, 789.012, "NORTH", Config.data.hud_x, Config.data.hud_y);
         
-        // Render the HUD at its current configured position
-        CoordsHUDOverlay.renderHUD(guiGraphics, 123.456, 64.0, 789.012, "NORTH", Config.HUD_X.get(), Config.HUD_Y.get());
-        
-        // Draw instructions
-        guiGraphics.drawCenteredString(this.font, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
-        guiGraphics.drawCenteredString(this.font, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
+        drawContext.drawCenteredTextWithShadow(this.textRenderer, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
+        drawContext.drawCenteredTextWithShadow(this.textRenderer, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
     }
 
     @Override
-    public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        int x = Config.HUD_X.get();
-        int y = Config.HUD_Y.get();
+    public boolean mouseClicked(Click click, boolean bl) {
+        double mouseX = click.x();
+        double mouseY = click.y();
         
-        // Rough hit-box for the HUD (assume 150x30 for now)
+        int x = Config.data.hud_x;
+        int y = Config.data.hud_y;
+        
         if (mouseX >= x && mouseX <= x + 150 && mouseY >= y && mouseY <= y + 30) {
             this.dragging = true;
             this.dragOffsetX = mouseX - x;
             this.dragOffsetY = mouseY - y;
             return true;
         }
-        return super.mouseClicked(mouseX, mouseY, button);
+        return super.mouseClicked(click, bl);
     }
 
     @Override
-    public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
+    public boolean mouseDragged(Click click, double deltaX, double deltaY) {
         if (this.dragging) {
-            int newX = (int) (mouseX - this.dragOffsetX);
-            int newY = (int) (mouseY - this.dragOffsetY);
+            int newX = (int) (click.x() - this.dragOffsetX);
+            int newY = (int) (click.y() - this.dragOffsetY);
             
-            // Constrain to screen
             newX = Math.max(0, Math.min(newX, this.width - 10));
             newY = Math.max(0, Math.min(newY, this.height - 10));
             
-            Config.HUD_X.set(newX);
-            Config.HUD_Y.set(newY);
+            Config.data.hud_x = newX;
+            Config.data.hud_y = newY;
             return true;
         }
-        return super.mouseDragged(mouseX, mouseY, button, dragX, dragY);
+        return super.mouseDragged(click, deltaX, deltaY);
     }
 
     @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button) {
+    public boolean mouseReleased(Click click) {
         this.dragging = false;
-        return super.mouseReleased(mouseX, mouseY, button);
+        return super.mouseReleased(click);
     }
 
     @Override
-    public void onClose() {
-        Config.HUD_X.save();
-        Config.HUD_Y.save();
-        this.minecraft.setScreen(this.parent);
+    public void close() {
+        Config.save();
+        if (this.client != null) {
+            this.client.setScreen(this.parent);
+        }
     }
 
     @Override
-    public boolean isPauseScreen() {
+    public boolean shouldPause() {
         return true;
     }
 }
