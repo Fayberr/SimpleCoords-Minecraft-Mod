@@ -1,0 +1,39 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="GPL-3.0-or-later"
+logoFile="logo.png"
+
+[[mods]]
+modId="simplecoords"
+version="${mod_version}"
+displayName="SimpleCoords"
+displayURL="https://github.com/Fayberr/SimpleCoords-Minecraft-Mod"
+issueTrackerURL="https://github.com/Fayberr/SimpleCoords-Minecraft-Mod/issues"
+sourceURL="https://github.com/Fayberr/SimpleCoords-Minecraft-Mod"
+authors="Fayber"
+description='''
+SimpleCoords is a lightweight, highly customizable client-side HUD mod for Minecraft 1.21.1. 
+
+Features:
+- Precision XYZ Coordinates (0-5 decimals)
+- Subchunk relative coordinates
+- Facing direction indicator
+- Fully interactive "Drag & Drop" HUD positioning editor
+- Freecam compatibility: display camera coords instead of player body
+- Easy in-game configuration via the NeoForge Mods menu
+- Quick toggle command: /simplecoords toggle
+'''
+
+[[dependencies.simplecoords]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${neo_version},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.simplecoords]]
+    modId="minecraft"
+    type="required"
+    versionRange="[${minecraft_version},)"
+    ordering="NONE"
+    side="CLIENT"
