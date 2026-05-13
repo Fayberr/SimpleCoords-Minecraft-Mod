@@ -16,6 +16,9 @@
   "entrypoints": {
     "client": [
       "com.fayber.simplecoords.SimpleCoords"
+    ],
+    "modmenu": [
+      "com.fayber.simplecoords.SimpleCoordsModMenu"
     ]
   },
   "depends": {

@@ -21,7 +21,7 @@ public class HUDEditorScreen extends Screen {
         super.render(drawContext, mouseX, mouseY, partialTick);
 
         CoordsHUDOverlay.renderHUD(drawContext, 123.456, 64.0, 789.012, "NORTH", Config.data.hud_x, Config.data.hud_y);
-        
+
         drawContext.drawCenteredTextWithShadow(this.textRenderer, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
         drawContext.drawCenteredTextWithShadow(this.textRenderer, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
     }
@@ -34,7 +34,12 @@ public class HUDEditorScreen extends Screen {
         int x = Config.data.hud_x;
         int y = Config.data.hud_y;
         
-        if (mouseX >= x && mouseX <= x + 150 && mouseY >= y && mouseY <= y + 30) {
+        int width = 100;
+        if (this.client != null) {
+            width = Math.max(width, this.client.textRenderer.getWidth("XYZ: 123.456 / 64.000 / 789.012") + 4);
+        }
+
+        if (mouseX >= x - 2 && mouseX <= x + width && mouseY >= y - 2 && mouseY <= y + 32) {
             this.dragging = true;
             this.dragOffsetX = mouseX - x;
             this.dragOffsetY = mouseY - y;
@@ -48,10 +53,10 @@ public class HUDEditorScreen extends Screen {
         if (this.dragging) {
             int newX = (int) (click.x() - this.dragOffsetX);
             int newY = (int) (click.y() - this.dragOffsetY);
-            
+
             newX = Math.max(0, Math.min(newX, this.width - 10));
             newY = Math.max(0, Math.min(newY, this.height - 10));
-            
+
             Config.data.hud_x = newX;
             Config.data.hud_y = newY;
             return true;

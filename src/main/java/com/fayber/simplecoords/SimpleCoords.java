@@ -12,10 +12,14 @@ public class SimpleCoords implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         Config.load();
+
+        HudRenderCallback.EVENT.register((drawContext, tickCounter) -> {
+            // LOGGER.info("HudRenderCallback fired"); // Too much spam, but good for local check
+            CoordsHUDOverlay.render(drawContext, tickCounter);
+        });
         
-        HudRenderCallback.EVENT.register(CoordsHUDOverlay::render);
         ClientCommandHandler.register();
-        
-        LOGGER.info("SimpleCoordsHUD initialized!");
+
+        LOGGER.info("SimpleCoordsHUD v1.1.1 initialized! HUD Enabled: {}", Config.data.enabled);
     }
 }

@@ -21,7 +21,9 @@ public class Config {
         public boolean show_xyz = true;
         public boolean show_subchunk = true;
         public boolean show_facing = true;
-        public int precision = 3;
+        public boolean show_background = true;
+        public boolean show_intercardinal = false;
+        public int precision = 0;
         public int hud_x = 5;
         public int hud_y = 5;
     }
