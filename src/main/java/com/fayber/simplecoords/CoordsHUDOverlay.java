@@ -13,7 +13,9 @@ public class CoordsHUDOverlay {
     public static void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
         Minecraft client = Minecraft.getInstance();
 
-        if (!Config.data.enabled || client.player == null || client.options.hideGui) {
+        // The element is attached after SUBTITLES, so the vanilla hide-gui
+        // render condition is inherited (26.2 removed Options.hideGui).
+        if (!Config.data.enabled || client.player == null) {
             return;
         }
 

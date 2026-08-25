@@ -99,14 +99,14 @@ public class CustomConfigScreen extends Screen {
 
         // 9. HUD Editor Button
         this.addRenderableWidget(Button.builder(Component.literal("Edit HUD Position (Drag & Drop)"), button -> {
-            this.minecraft.setScreen(new HUDEditorScreen(this));
+            this.minecraft.setScreenAndShow(new HUDEditorScreen(this));
         })
         .bounds(centerX - 100, startY + spacing * 8, 200, 20)
         .build());
 
         // Back button
         this.addRenderableWidget(Button.builder(Component.translatable("gui.back"), button -> {
-            this.minecraft.setScreen(this.parent);
+            this.minecraft.setScreenAndShow(this.parent);
         })
         .bounds(centerX - 100, this.height - 30, 200, 20)
         .build());
@@ -124,6 +124,6 @@ public class CustomConfigScreen extends Screen {
 
     @Override
     public void onClose() {
-        this.minecraft.setScreen(this.parent);
+        this.minecraft.setScreenAndShow(this.parent);
     }
 }
