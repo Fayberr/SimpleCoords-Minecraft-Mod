@@ -23,7 +23,7 @@ dependencies {
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	// Extra mods as compileOnly (no remap needed on 26.1+):
-	compileOnly "com.terraformersmc:modmenu:18.0.0"
+	compileOnly "com.terraformersmc:modmenu:21.0.0"
 }
 
 processResources {
