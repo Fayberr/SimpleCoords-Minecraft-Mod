@@ -15,12 +15,12 @@ public class ClientCommandHandler {
                 ClientCommands.literal("simplecoords")
                     .executes(context -> {
                         // Client commands run on the game thread in 26.1.2; no execute() wrapper needed.
-                        Minecraft.getInstance().setScreenAndShow(new CustomConfigScreen(null));
+                        Minecraft.getInstance().setScreenAndShow(ConfigScreenRouter.create(null));
                         return 1;
                     })
                     .then(ClientCommands.literal("config")
                         .executes(context -> {
-                            Minecraft.getInstance().setScreenAndShow(new CustomConfigScreen(null));
+                            Minecraft.getInstance().setScreenAndShow(ConfigScreenRouter.create(null));
                             return 1;
                         })
                     )
@@ -69,6 +69,16 @@ public class ClientCommandHandler {
                                     Config.data.show_facing = BoolArgumentType.getBool(context, "value");
                                     Config.save();
                                     context.getSource().sendFeedback(Component.literal("Show Facing: " + Config.data.show_facing));
+                                    return 1;
+                                })
+                            )
+                        )
+                        .then(ClientCommands.literal("show_biome")
+                            .then(ClientCommands.argument("value", BoolArgumentType.bool())
+                                .executes(context -> {
+                                    Config.data.show_biome = BoolArgumentType.getBool(context, "value");
+                                    Config.save();
+                                    context.getSource().sendFeedback(Component.literal("Show Biome: " + Config.data.show_biome));
                                     return 1;
                                 })
                             )

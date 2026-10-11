@@ -11,11 +11,13 @@ base {
 }
 
 repositories {
+	mavenLocal()
 	// Terraformers maven for ModMenu
 	maven { name = 'Terraformers'; url = 'https://maven.terraformersmc.com/' }
 }
 
 dependencies {
+	compileOnly "net.fayber:modern-config:1.9.4+26.3"
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
@@ -59,4 +61,22 @@ publishing {
 			from components.java
 		}
 	}
+}
+
+// Client tests run once with the built-in screen, and once with optional Modern Config.
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "simplecoords-test"
+        enableGameTests = false
+        enableClientGameTests = true
+        eula = true
+    }
+}
+dependencies { gametestRuntimeOnly "com.terraformersmc:modmenu:21.0.0" }
+if (project.hasProperty('testModernConfig')) {
+    dependencies {
+        gametestRuntimeOnly "net.fayber:modern-config:1.9.4+26.3"
+        gametestRuntimeOnly "net.fayber:modern-gui:1.0.14+26.3"
+    }
 }

@@ -21,6 +21,7 @@ public class Config {
         public boolean show_xyz = true;
         public boolean show_subchunk = true;
         public boolean show_facing = true;
+        public boolean show_biome = true;
         public boolean show_background = true;
         public boolean show_intercardinal = false;
         public int precision = 0;

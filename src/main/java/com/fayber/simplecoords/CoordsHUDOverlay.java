@@ -4,6 +4,8 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.util.Mth;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
@@ -29,7 +31,26 @@ public class CoordsHUDOverlay {
         float yaw = target.getViewYRot(partialTick);
         String facing = getFacingDirection(yaw, Config.data.show_intercardinal);
 
-        renderHUD(graphics, x, y, z, facing, Config.data.hud_x, Config.data.hud_y);
+        renderHUD(graphics, x, y, z, facing, Config.data.show_biome ? biomeAt(x, y, z) : "", Config.data.hud_x, Config.data.hud_y);
+    }
+
+    static String biomeAt(double x, double y, double z) {
+        Minecraft client = Minecraft.getInstance();
+        if (client.level == null) return "Unknown";
+        return client.level.getBiome(BlockPos.containing(x, y, z)).unwrapKey()
+                .map(key -> {
+                    var id = key.identifier();
+                    return Component.translatableWithFallback("biome." + id.getNamespace() + "." + id.getPath(),
+                            biomeFallback(id.getPath())).getString();
+                }).orElse("Unknown");
+    }
+
+    private static String biomeFallback(String path) {
+        String[] words = path.replace('/', ' ').split("_");
+        for (int i = 0; i < words.length; i++) {
+            if (!words[i].isEmpty()) words[i] = Character.toUpperCase(words[i].charAt(0)) + words[i].substring(1);
+        }
+        return String.join(" ", words);
     }
 
     private static String getFacingDirection(float yaw, boolean includeIntercardinal) {
@@ -53,7 +74,7 @@ public class CoordsHUDOverlay {
         return "NORTH";
     }
 
-    public static void renderHUD(GuiGraphicsExtractor graphics, double x, double y, double z, String facing, int xPos, int yPos) {
+    public static void renderHUD(GuiGraphicsExtractor graphics, double x, double y, double z, String facing, String biome, int xPos, int yPos) {
         Minecraft client = Minecraft.getInstance();
         int textColor = 0xFFFFFFFF; // White
         int lineHeight = 10;
@@ -81,6 +102,10 @@ public class CoordsHUDOverlay {
 
         if (Config.data.show_facing) {
             lines.add("Facing: " + facing);
+        }
+
+        if (Config.data.show_biome) {
+            lines.add("Biome: " + biome);
         }
 
         if (lines.isEmpty()) return;

@@ -17,7 +17,7 @@ public class CustomConfigScreen extends Screen {
     @Override
     protected void init() {
         int centerX = this.width / 2;
-        int startY = 25;
+        int startY = 23;
         int spacing = 22;
 
         // 1. Enabled Toggle
@@ -26,7 +26,7 @@ public class CustomConfigScreen extends Screen {
             Config.save();
             button.setMessage(getToggleText("HUD Enabled", Config.data.enabled));
         })
-        .bounds(centerX - 100, startY, 200, 20)
+        .bounds(centerX - 155, startY, 150, 20)
         .build());
 
         // 2. Use Camera Toggle
@@ -35,7 +35,7 @@ public class CustomConfigScreen extends Screen {
             Config.save();
             button.setMessage(getToggleText("Use Camera Pos", Config.data.use_camera));
         })
-        .bounds(centerX - 100, startY + spacing, 200, 20)
+        .bounds(centerX + 5, startY, 150, 20)
         .build());
 
         // 3. Show XYZ Toggle
@@ -44,7 +44,7 @@ public class CustomConfigScreen extends Screen {
             Config.save();
             button.setMessage(getToggleText("Show XYZ", Config.data.show_xyz));
         })
-        .bounds(centerX - 100, startY + spacing * 2, 200, 20)
+        .bounds(centerX - 155, startY + spacing * 1, 150, 20)
         .build());
 
         // 4. Show Subchunk Toggle
@@ -53,7 +53,7 @@ public class CustomConfigScreen extends Screen {
             Config.save();
             button.setMessage(getToggleText("Show Subchunk", Config.data.show_subchunk));
         })
-        .bounds(centerX - 100, startY + spacing * 3, 200, 20)
+        .bounds(centerX + 5, startY + spacing * 1, 150, 20)
         .build());
 
         // 5. Show Facing Toggle
@@ -62,16 +62,16 @@ public class CustomConfigScreen extends Screen {
             Config.save();
             button.setMessage(getToggleText("Show Facing", Config.data.show_facing));
         })
-        .bounds(centerX - 100, startY + spacing * 4, 200, 20)
+        .bounds(centerX - 155, startY + spacing * 2, 150, 20)
         .build());
 
         // 6. Show Intercardinal Toggle
-        this.addRenderableWidget(Button.builder(getToggleText("Intercardinal Directions", Config.data.show_intercardinal), button -> {
+        this.addRenderableWidget(Button.builder(getToggleText("Intercardinal", Config.data.show_intercardinal), button -> {
             Config.data.show_intercardinal = !Config.data.show_intercardinal;
             Config.save();
-            button.setMessage(getToggleText("Intercardinal Directions", Config.data.show_intercardinal));
+            button.setMessage(getToggleText("Intercardinal", Config.data.show_intercardinal));
         })
-        .bounds(centerX - 100, startY + spacing * 5, 200, 20)
+        .bounds(centerX + 5, startY + spacing * 2, 150, 20)
         .build());
 
         // 7. Show Background Toggle
@@ -80,11 +80,11 @@ public class CustomConfigScreen extends Screen {
             Config.save();
             button.setMessage(getToggleText("Show Background", Config.data.show_background));
         })
-        .bounds(centerX - 100, startY + spacing * 6, 200, 20)
+        .bounds(centerX - 155, startY + spacing * 3, 150, 20)
         .build());
 
         // 8. Precision Slider
-        this.addRenderableWidget(new AbstractSliderButton(centerX - 100, startY + spacing * 7, 200, 20, Component.literal("Precision: " + Config.data.precision), (double) Config.data.precision / 5.0) {
+        this.addRenderableWidget(new AbstractSliderButton(centerX + 5, startY + spacing * 3, 150, 20, Component.literal("Precision: " + Config.data.precision), (double) Config.data.precision / 5.0) {
             @Override
             protected void updateMessage() {
                 this.setMessage(Component.literal("Decimal Precision: " + Config.data.precision));
@@ -98,11 +98,17 @@ public class CustomConfigScreen extends Screen {
         });
 
         // 9. HUD Editor Button
-        this.addRenderableWidget(Button.builder(Component.literal("Edit HUD Position (Drag & Drop)"), button -> {
+        this.addRenderableWidget(Button.builder(Component.literal("Edit HUD Position"), button -> {
             this.minecraft.setScreenAndShow(new HUDEditorScreen(this));
         })
-        .bounds(centerX - 100, startY + spacing * 8, 200, 20)
+        .bounds(centerX - 155, startY + spacing * 4, 150, 20)
         .build());
+
+        this.addRenderableWidget(Button.builder(getToggleText("Show Biome", Config.data.show_biome), button -> {
+            Config.data.show_biome = !Config.data.show_biome;
+            Config.save();
+            button.setMessage(getToggleText("Show Biome", Config.data.show_biome));
+        }).bounds(centerX + 5, startY + spacing * 4, 150, 20).build());
 
         // Back button
         this.addRenderableWidget(Button.builder(Component.translatable("gui.back"), button -> {
