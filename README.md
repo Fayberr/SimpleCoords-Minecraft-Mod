@@ -1,5 +1,7 @@
 # SimpleCoords
 
+[Modrinth](https://modrinth.com/mod/simple-coords)
+
 A client-side Fabric mod that shows a small coordinate HUD on screen.
 
 ## Features
