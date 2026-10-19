@@ -83,6 +83,46 @@ public class ClientCommandHandler {
                                 })
                             )
                         )
+                        .then(ClientCommands.literal("show_target")
+                            .then(ClientCommands.argument("value", BoolArgumentType.bool())
+                                .executes(context -> {
+                                    Config.data.show_target = BoolArgumentType.getBool(context, "value");
+                                    Config.save();
+                                    context.getSource().sendFeedback(Component.literal("show_target: " + Config.data.show_target));
+                                    return 1;
+                                })
+                            )
+                        )
+                        .then(ClientCommands.literal("show_target_subchunk")
+                            .then(ClientCommands.argument("value", BoolArgumentType.bool())
+                                .executes(context -> {
+                                    Config.data.show_target_subchunk = BoolArgumentType.getBool(context, "value");
+                                    Config.save();
+                                    context.getSource().sendFeedback(Component.literal("show_target_subchunk: " + Config.data.show_target_subchunk));
+                                    return 1;
+                                })
+                            )
+                        )
+                        .then(ClientCommands.literal("show_target_type")
+                            .then(ClientCommands.argument("value", BoolArgumentType.bool())
+                                .executes(context -> {
+                                    Config.data.show_target_type = BoolArgumentType.getBool(context, "value");
+                                    Config.save();
+                                    context.getSource().sendFeedback(Component.literal("show_target_type: " + Config.data.show_target_type));
+                                    return 1;
+                                })
+                            )
+                        )
+                        .then(ClientCommands.literal("show_target_state")
+                            .then(ClientCommands.argument("value", BoolArgumentType.bool())
+                                .executes(context -> {
+                                    Config.data.show_target_state = BoolArgumentType.getBool(context, "value");
+                                    Config.save();
+                                    context.getSource().sendFeedback(Component.literal("show_target_state: " + Config.data.show_target_state));
+                                    return 1;
+                                })
+                            )
+                        )
                         .then(ClientCommands.literal("precision")
                             .then(ClientCommands.argument("value", IntegerArgumentType.integer(0, 5))
                                 .executes(context -> {

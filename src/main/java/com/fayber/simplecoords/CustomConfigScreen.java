@@ -110,12 +110,26 @@ public class CustomConfigScreen extends Screen {
             button.setMessage(getToggleText("Show Biome", Config.data.show_biome));
         }).bounds(centerX + 5, startY + spacing * 4, 150, 20).build());
 
+        addTargetToggle("Target Coordinates", () -> Config.data.show_target, v -> Config.data.show_target = v, centerX - 155, startY + spacing * 5);
+        addTargetToggle("Target Subchunk", () -> Config.data.show_target_subchunk, v -> Config.data.show_target_subchunk = v, centerX + 5, startY + spacing * 5);
+        addTargetToggle("Target Block Type", () -> Config.data.show_target_type, v -> Config.data.show_target_type = v, centerX - 155, startY + spacing * 6);
+        addTargetToggle("Target Block State", () -> Config.data.show_target_state, v -> Config.data.show_target_state = v, centerX + 5, startY + spacing * 6);
+
         // Back button
         this.addRenderableWidget(Button.builder(Component.translatable("gui.back"), button -> {
             this.minecraft.setScreenAndShow(this.parent);
         })
         .bounds(centerX - 100, this.height - 30, 200, 20)
         .build());
+    }
+
+    private void addTargetToggle(String label, java.util.function.BooleanSupplier get,
+                                 java.util.function.Consumer<Boolean> set, int x, int y) {
+        addRenderableWidget(Button.builder(getToggleText(label, get.getAsBoolean()), button -> {
+            set.accept(!get.getAsBoolean());
+            Config.save();
+            button.setMessage(getToggleText(label, get.getAsBoolean()));
+        }).bounds(x, y, 150, 20).build());
     }
 
     private Component getToggleText(String prefix, boolean value) {

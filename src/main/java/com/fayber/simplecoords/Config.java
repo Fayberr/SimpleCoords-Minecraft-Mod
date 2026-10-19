@@ -22,6 +22,10 @@ public class Config {
         public boolean show_subchunk = true;
         public boolean show_facing = true;
         public boolean show_biome = true;
+        public boolean show_target = true;
+        public boolean show_target_subchunk = false;
+        public boolean show_target_type = false;
+        public boolean show_target_state = false;
         public boolean show_background = true;
         public boolean show_intercardinal = false;
         public int precision = 0;

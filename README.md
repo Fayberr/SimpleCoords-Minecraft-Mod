@@ -57,3 +57,13 @@ The production jar contains neither the tests nor the optional libraries.
 ## License
 
 GPL-3.0-or-later
+
+## Targeted block
+
+The targeted block's XYZ coordinates appear last in the HUD, beneath the biome.
+Target Subchunk, Target Block Type, and Target Block State are optional and default off.
+Subchunk values are local X/Y/Z coordinates from 0 to 15. Block types use registry IDs
+such as `minecraft:oak_stairs`; states show properties such as `facing=north`.
+The target section hides when the crosshair does not hit a block within normal reach.
+Use the settings screen or `/simplecoords set show_target true` to toggle the section.
+The additional command options are `show_target_subchunk`, `show_target_type`, and `show_target_state`.

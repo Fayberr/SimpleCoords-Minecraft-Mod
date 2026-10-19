@@ -10,6 +10,11 @@ import net.minecraft.world.entity.Entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class CoordsHUDOverlay {
     public static void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
@@ -32,6 +37,36 @@ public class CoordsHUDOverlay {
         String facing = getFacingDirection(yaw, Config.data.show_intercardinal);
 
         renderHUD(graphics, x, y, z, facing, Config.data.show_biome ? biomeAt(x, y, z) : "", Config.data.hud_x, Config.data.hud_y);
+    }
+
+    static List<String> targetLines() {
+        Minecraft client = Minecraft.getInstance();
+        if (!Config.data.show_target || client.level == null
+                || !(client.hitResult instanceof BlockHitResult hit)
+                || hit.getType() != HitResult.Type.BLOCK) return List.of();
+        BlockPos pos = hit.getBlockPos();
+        return targetLines(pos, client.level.getBlockState(pos));
+    }
+
+    static List<String> targetLines(BlockPos pos, BlockState state) {
+        if (!Config.data.show_target) return List.of();
+        List<String> lines = new ArrayList<>();
+        lines.add(String.format("Target XYZ: %d / %d / %d", pos.getX(), pos.getY(), pos.getZ()));
+        if (Config.data.show_target_subchunk) {
+            lines.add(String.format("Target Subchunk: %d %d %d", pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15));
+        }
+        if (Config.data.show_target_type) {
+            lines.add("Target Block: " + BuiltInRegistries.BLOCK.getKey(state.getBlock()));
+        }
+        if (Config.data.show_target_state) {
+            state.getProperties().stream().sorted(java.util.Comparator.comparing(Property::getName))
+                    .forEach(property -> lines.add("  " + stateProperty(state, property)));
+        }
+        return lines;
+    }
+
+    private static <T extends Comparable<T>> String stateProperty(BlockState state, Property<T> property) {
+        return property.getName() + "=" + property.getName(state.getValue(property));
     }
 
     static String biomeAt(double x, double y, double z) {
@@ -75,6 +110,11 @@ public class CoordsHUDOverlay {
     }
 
     public static void renderHUD(GuiGraphicsExtractor graphics, double x, double y, double z, String facing, String biome, int xPos, int yPos) {
+        renderHUD(graphics, x, y, z, facing, biome, xPos, yPos, targetLines());
+    }
+
+    static void renderHUD(GuiGraphicsExtractor graphics, double x, double y, double z, String facing, String biome,
+                          int xPos, int yPos, List<String> targetLines) {
         Minecraft client = Minecraft.getInstance();
         int textColor = 0xFFFFFFFF; // White
         int lineHeight = 10;
@@ -107,6 +147,8 @@ public class CoordsHUDOverlay {
         if (Config.data.show_biome) {
             lines.add("Biome: " + biome);
         }
+
+        lines.addAll(targetLines);
 
         if (lines.isEmpty()) return;
 

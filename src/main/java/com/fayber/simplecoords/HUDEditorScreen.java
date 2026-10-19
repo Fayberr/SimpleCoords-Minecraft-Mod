@@ -20,10 +20,15 @@ public class HUDEditorScreen extends Screen {
     public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
         super.extractRenderState(graphics, mouseX, mouseY, partialTick);
 
-        CoordsHUDOverlay.renderHUD(graphics, 123.456, 64.0, 789.012, "NORTH", "Plains", Config.data.hud_x, Config.data.hud_y);
+        CoordsHUDOverlay.renderHUD(graphics, 123.456, 64.0, 789.012, "NORTH", "Plains", Config.data.hud_x, Config.data.hud_y, previewTarget());
 
         graphics.centeredText(this.font, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
         graphics.centeredText(this.font, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
+    }
+
+    private java.util.List<String> previewTarget() {
+        return CoordsHUDOverlay.targetLines(new net.minecraft.core.BlockPos(123, 64, 789),
+                net.minecraft.world.level.block.Blocks.OAK_STAIRS.defaultBlockState());
     }
 
     @Override
@@ -37,8 +42,9 @@ public class HUDEditorScreen extends Screen {
         int width = 100;
         width = Math.max(width, this.minecraft.font.width("XYZ: 123.456 / 64.000 / 789.012") + 4);
 
+        for (String line : previewTarget()) width = Math.max(width, this.minecraft.font.width(line) + 4);
         int lineCount = (Config.data.show_xyz ? 1 : 0) + (Config.data.show_subchunk ? 1 : 0)
-                + (Config.data.show_facing ? 1 : 0) + (Config.data.show_biome ? 1 : 0);
+                + (Config.data.show_facing ? 1 : 0) + (Config.data.show_biome ? 1 : 0) + previewTarget().size();
 
         if (lineCount > 0 && mouseX >= x - 2 && mouseX <= x + width && mouseY >= y - 2 && mouseY <= y + 10 * lineCount) {
             this.dragging = true;
