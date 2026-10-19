@@ -2,8 +2,6 @@
 
 Source of truth for https://modrinth.com/mod/simple-coords.
 
-(Synced from the live page after an external edit during publication. Preserve this wording.)
-
 ## description
 
 A lightweight client-side HUD showing coordinates, subchunk position, facing direction and biome.
@@ -18,6 +16,7 @@ Shows a small coordinate HUD on screen. Client-side only.
 
 - XYZ coordinates with adjustable precision (0 to 5 decimals), subchunk position and facing direction.
 - Current biome, with a toggle to show or hide it.
+- Targeted block coordinates beneath the biome, with optional subchunk coordinates, block type and state (26.3, version 2.2.0+).
 - Uses the camera position instead of the player position, so it also works with freecam and when riding.
 - Optional background behind the text.
 - Settings through Modern Config when installed, with a built-in screen otherwise. Modern Config is optional.
@@ -34,3 +33,5 @@ All commands are client-side.
 - `/simplecoords set show_biome <true/false>` shows or hides the biome.
 
 A Mod Menu config screen is available if Mod Menu is installed. Requires Fabric API on Fabric.
+
+
