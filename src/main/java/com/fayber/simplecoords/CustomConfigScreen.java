@@ -20,7 +20,6 @@ public class CustomConfigScreen extends Screen {
         int startY = 23;
         int spacing = 22;
 
-        // 1. Enabled Toggle
         this.addRenderableWidget(Button.builder(getToggleText("HUD Enabled", Config.data.enabled), button -> {
             Config.data.enabled = !Config.data.enabled;
             Config.save();
@@ -29,7 +28,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX - 155, startY, 150, 20)
         .build());
 
-        // 2. Use Camera Toggle
         this.addRenderableWidget(Button.builder(getToggleText("Use Camera Pos", Config.data.use_camera), button -> {
             Config.data.use_camera = !Config.data.use_camera;
             Config.save();
@@ -38,7 +36,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX + 5, startY, 150, 20)
         .build());
 
-        // 3. Show XYZ Toggle
         this.addRenderableWidget(Button.builder(getToggleText("Show XYZ", Config.data.show_xyz), button -> {
             Config.data.show_xyz = !Config.data.show_xyz;
             Config.save();
@@ -47,7 +44,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX - 155, startY + spacing * 1, 150, 20)
         .build());
 
-        // 4. Show Subchunk Toggle
         this.addRenderableWidget(Button.builder(getToggleText("Show Subchunk", Config.data.show_subchunk), button -> {
             Config.data.show_subchunk = !Config.data.show_subchunk;
             Config.save();
@@ -56,7 +52,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX + 5, startY + spacing * 1, 150, 20)
         .build());
 
-        // 5. Show Facing Toggle
         this.addRenderableWidget(Button.builder(getToggleText("Show Facing", Config.data.show_facing), button -> {
             Config.data.show_facing = !Config.data.show_facing;
             Config.save();
@@ -65,7 +60,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX - 155, startY + spacing * 2, 150, 20)
         .build());
 
-        // 6. Show Intercardinal Toggle
         this.addRenderableWidget(Button.builder(getToggleText("Intercardinal", Config.data.show_intercardinal), button -> {
             Config.data.show_intercardinal = !Config.data.show_intercardinal;
             Config.save();
@@ -74,7 +68,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX + 5, startY + spacing * 2, 150, 20)
         .build());
 
-        // 7. Show Background Toggle
         this.addRenderableWidget(Button.builder(getToggleText("Show Background", Config.data.show_background), button -> {
             Config.data.show_background = !Config.data.show_background;
             Config.save();
@@ -83,7 +76,6 @@ public class CustomConfigScreen extends Screen {
         .bounds(centerX - 155, startY + spacing * 3, 150, 20)
         .build());
 
-        // 8. Precision Slider
         this.addRenderableWidget(new AbstractSliderButton(centerX + 5, startY + spacing * 3, 150, 20, Component.literal("Precision: " + Config.data.precision), (double) Config.data.precision / 5.0) {
             @Override
             protected void updateMessage() {
@@ -97,7 +89,6 @@ public class CustomConfigScreen extends Screen {
             }
         });
 
-        // 9. HUD Editor Button
         this.addRenderableWidget(Button.builder(Component.literal("Edit HUD Position"), button -> {
             this.minecraft.setScreenAndShow(new HUDEditorScreen(this));
         })
