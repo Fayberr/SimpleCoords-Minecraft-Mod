@@ -1,5 +1,5 @@
 plugins {
-	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'net.fabricmc.fabric-loom-remap' version "${loom_version}"
 	id 'maven-publish'
 }
 
@@ -11,21 +11,20 @@ base {
 }
 
 repositories {
-	mavenLocal()
 	// Terraformers maven for ModMenu
 	maven { name = 'Terraformers'; url = 'https://maven.terraformersmc.com/' }
 }
 
 dependencies {
-	compileOnly "net.fayber:modern-config:1.9.4+26.3"
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	minecraft "net.minecraft:minecraft:${project.minecraft_version}"
+	mappings loom.officialMojangMappings()
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. Optional but most mods want it.
-	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
-	// Extra mods as compileOnly (no remap needed on 26.1+):
-	compileOnly "com.terraformersmc:modmenu:21.0.0"
+	// Optional ModMenu integration.
+	modCompileOnly "com.terraformersmc:modmenu:17.0.1"
 }
 
 processResources {
@@ -40,13 +39,14 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 25
+	it.options.release = 21
 }
 
 java {
+	toolchain.languageVersion = JavaLanguageVersion.of(21)
 	withSourcesJar()
-	sourceCompatibility = JavaVersion.VERSION_25
-	targetCompatibility = JavaVersion.VERSION_25
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -63,7 +63,7 @@ publishing {
 	}
 }
 
-// Client tests run once with the built-in screen, and once with optional Modern Config.
+// Client regression tests use the built-in settings screen.
 fabricApi {
     configureTests {
         createSourceSet = true
@@ -73,10 +73,9 @@ fabricApi {
         eula = true
     }
 }
-dependencies { gametestRuntimeOnly "com.terraformersmc:modmenu:21.0.0" }
-if (project.hasProperty('testModernConfig')) {
-    dependencies {
-        gametestRuntimeOnly "net.fayber:modern-config:1.9.4+26.3"
-        gametestRuntimeOnly "net.fayber:modern-gui:1.0.14+26.3"
-    }
+dependencies { modRuntimeOnly "com.terraformersmc:modmenu:17.0.1" }
+
+// Fabric API 0.141.6's packet synchronizer stalls the integrated-world login on 1.21.11.
+tasks.named('runClientGameTest', JavaExec) {
+    jvmArgs '-Dfabric.client.gametest.disableNetworkSynchronizer'
 }

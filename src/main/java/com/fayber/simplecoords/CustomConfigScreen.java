@@ -1,6 +1,6 @@
 package com.fayber.simplecoords;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractSliderButton;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -90,7 +90,7 @@ public class CustomConfigScreen extends Screen {
         });
 
         this.addRenderableWidget(Button.builder(Component.literal("Edit HUD Position"), button -> {
-            this.minecraft.setScreenAndShow(new HUDEditorScreen(this));
+            this.minecraft.setScreen(new HUDEditorScreen(this));
         })
         .bounds(centerX - 155, startY + spacing * 4, 150, 20)
         .build());
@@ -108,7 +108,7 @@ public class CustomConfigScreen extends Screen {
 
         // Back button
         this.addRenderableWidget(Button.builder(Component.translatable("gui.back"), button -> {
-            this.minecraft.setScreenAndShow(this.parent);
+            this.minecraft.setScreen(this.parent);
         })
         .bounds(centerX - 100, this.height - 30, 200, 20)
         .build());
@@ -128,13 +128,13 @@ public class CustomConfigScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
-        graphics.centeredText(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 8, 0xFFFFFF);
     }
 
     @Override
     public void onClose() {
-        this.minecraft.setScreenAndShow(this.parent);
+        this.minecraft.setScreen(this.parent);
     }
 }

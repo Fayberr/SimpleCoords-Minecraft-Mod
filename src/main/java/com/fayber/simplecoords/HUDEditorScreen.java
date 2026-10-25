@@ -1,6 +1,6 @@
 package com.fayber.simplecoords;
 
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
@@ -17,13 +17,13 @@ public class HUDEditorScreen extends Screen {
     }
 
     @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
 
         CoordsHUDOverlay.renderHUD(graphics, 123.456, 64.0, 789.012, "NORTH", "Plains", Config.data.hud_x, Config.data.hud_y, previewTarget());
 
-        graphics.centeredText(this.font, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
-        graphics.centeredText(this.font, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
+        graphics.drawCenteredString(this.font, "Drag the HUD to reposition it", this.width / 2, 10, 0xFFFFFF);
+        graphics.drawCenteredString(this.font, "Press ESC to Save & Close", this.width / 2, 20, 0xAAAAAA);
     }
 
     private java.util.List<String> previewTarget() {
@@ -80,7 +80,7 @@ public class HUDEditorScreen extends Screen {
     @Override
     public void onClose() {
         Config.save();
-        this.minecraft.setScreenAndShow(this.parent);
+        this.minecraft.setScreen(this.parent);
     }
 
     @Override

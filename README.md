@@ -2,7 +2,7 @@
 
 [Modrinth](https://modrinth.com/mod/simple-coords)
 
-A client-side Fabric mod that shows a small coordinate HUD on screen.
+A client-side Fabric mod for Minecraft 1.21.11 that shows a small coordinate HUD on screen.
 
 ## Features
 
@@ -29,30 +29,30 @@ All commands are client-side.
 - `/simplecoords set show_biome <true/false>` show the biome.
 - `/simplecoords set precision <0-5>` set the number of decimals.
 
-Settings use Modern Config when installed, otherwise the built-in screen. Modern Config is optional. Its Save button persists changes; Cancel restores them. HUD X and Y sliders position the HUD in Modern Config. The built-in screen retains the drag editor.
+Settings use the built-in screen, including the HUD drag editor.
 
 A ModMenu config screen is available if ModMenu is installed.
 
 ## Building
 
-JDK 25, Gradle 9.7.0+, and a Minecraft 26.3 Fabric development environment.
-Publish Modern Config 1.9.4 for 26.3 to Maven local first (`1.9.4+26.3`).
+Requires JDK 21 for Minecraft and compilation. The Gradle wrapper uses 9.8.2;
+run Gradle itself with JDK 21 or newer.
 
 ```bash
-gradle build
+./gradlew build
 ```
 
-The jar is in `build/libs/`.
+The Java 21 jar is `build/libs/simplecoords-2.2.0+1.21.11.jar`.
 
-Client regression tests (a display or Xvfb is required):
+Client regression tests require a display or Xvfb:
 
 ```bash
-gradle runClientGameTest
-gradle runClientGameTest -PtestModernConfig
+ALSOFT_DRIVERS=null LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a ./gradlew runClientGameTest
 ```
 
-The second run also needs Modern GUI 1.0.14 for 26.3 in Maven local.
-The production jar contains neither the tests nor the optional libraries.
+The tests check config migration and persistence, settings, HUD positioning,
+biome names, targeted block state and normal crosshair reach. Tests and optional
+ModMenu are excluded from the production jar.
 
 ## License
 

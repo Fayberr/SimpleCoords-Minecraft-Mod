@@ -2,7 +2,7 @@ package com.fayber.simplecoords;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -17,11 +17,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
 public class CoordsHUDOverlay {
-    public static void render(GuiGraphicsExtractor graphics, DeltaTracker deltaTracker) {
+    public static void render(GuiGraphics graphics, DeltaTracker deltaTracker) {
         Minecraft client = Minecraft.getInstance();
 
-        // The element is attached after SUBTITLES, so the vanilla hide-gui
-        // render condition is inherited (26.2 removed Options.hideGui).
+        // Attached after SUBTITLES, inheriting its vanilla hide-GUI condition.
         if (!Config.data.enabled || client.player == null) {
             return;
         }
@@ -109,11 +108,11 @@ public class CoordsHUDOverlay {
         return "NORTH";
     }
 
-    public static void renderHUD(GuiGraphicsExtractor graphics, double x, double y, double z, String facing, String biome, int xPos, int yPos) {
+    public static void renderHUD(GuiGraphics graphics, double x, double y, double z, String facing, String biome, int xPos, int yPos) {
         renderHUD(graphics, x, y, z, facing, biome, xPos, yPos, targetLines());
     }
 
-    static void renderHUD(GuiGraphicsExtractor graphics, double x, double y, double z, String facing, String biome,
+    static void renderHUD(GuiGraphics graphics, double x, double y, double z, String facing, String biome,
                           int xPos, int yPos, List<String> targetLines) {
         Minecraft client = Minecraft.getInstance();
         int textColor = 0xFFFFFFFF; // White
@@ -163,7 +162,7 @@ public class CoordsHUDOverlay {
 
         int currentY = yPos;
         for (String line : lines) {
-            graphics.text(client.font, line, xPos, currentY, textColor, true);
+            graphics.drawString(client.font, line, xPos, currentY, textColor, true);
             currentY += lineHeight;
         }
     }
