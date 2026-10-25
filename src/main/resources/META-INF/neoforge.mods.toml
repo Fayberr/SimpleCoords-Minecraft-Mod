@@ -37,3 +37,10 @@ Features:
     versionRange="[${minecraft_version},)"
     ordering="NONE"
     side="CLIENT"
+
+[[dependencies.simplecoords]]
+    modId="cloth_config"
+    type="optional"
+    versionRange="[15,)"
+    ordering="NONE"
+    side="CLIENT"

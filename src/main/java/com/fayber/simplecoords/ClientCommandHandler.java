@@ -1,6 +1,8 @@
 package com.fayber.simplecoords;
 
 import net.minecraft.commands.Commands;
+import net.minecraft.client.Minecraft;
+import net.neoforged.fml.ModList;
 import net.minecraft.network.chat.Component;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,6 +16,12 @@ public class ClientCommandHandler {
     public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
         event.getDispatcher().register(
             Commands.literal("simplecoords")
+                .executes(context -> openSettings())
+                .then(Commands.literal("config").executes(context -> openSettings()))
+                .then(Commands.literal("hud").executes(context -> {
+                    Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new HUDEditorScreen(null)));
+                    return 1;
+                }))
                 .then(Commands.literal("toggle")
                     .executes(context -> {
                         boolean newValue = !Config.ENABLED.get();
@@ -26,5 +34,10 @@ public class ClientCommandHandler {
                     })
                 )
         );
+    }
+    private static int openSettings() {
+        Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(ConfigScreenRouter.create(
+                ModList.get().getModContainerById(SimpleCoords.MODID).orElseThrow(), null)));
+        return 1;
     }
 }

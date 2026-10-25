@@ -17,7 +17,7 @@ public class SimpleCoords {
         modContainer.registerConfig(ModConfig.Type.CLIENT, Config.SPEC);
 
         // Register the CUSTOM config screen
-        modContainer.registerExtensionPoint(IConfigScreenFactory.class, (mc, parent) -> new CustomConfigScreen(modContainer, parent));
+        modContainer.registerExtensionPoint(IConfigScreenFactory.class, ConfigScreenRouter::create);
 
         // Register the HUD layer
         modEventBus.addListener(this::registerGuiLayers);

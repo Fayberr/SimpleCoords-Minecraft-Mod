@@ -42,10 +42,12 @@ neoForge {
 }
 
 repositories {
+    maven { name = 'Shedaniel'; url = 'https://maven.shedaniel.me/' }
     mavenLocal()
 }
 
 dependencies {
+    compileOnly "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}"
 }
 
 processResources {
@@ -61,5 +63,34 @@ processResources {
 
     filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties
+    }
+}
+
+sourceSets {
+    settingsTest {
+        compileClasspath += sourceSets.main.output
+        runtimeClasspath += sourceSets.main.output
+    }
+}
+configurations.settingsTestImplementation.extendsFrom(configurations.implementation)
+configurations.settingsTestCompileOnly.extendsFrom(configurations.compileOnly)
+configurations.settingsTestRuntimeOnly.extendsFrom(configurations.runtimeOnly)
+neoForge.addModdingDependenciesTo(sourceSets.settingsTest)
+if (project.hasProperty('testCloth')) {
+    dependencies { runtimeOnly "me.shedaniel.cloth:cloth-config-neoforge:${project.cloth_config_version}" }
+}
+if (project.hasProperty('settingsTest')) {
+    neoForge {
+        mods {
+            simplecoords_settings_test { sourceSet sourceSets.settingsTest }
+        }
+        runs {
+            settingsTest {
+                client()
+                sourceSet = sourceSets.settingsTest
+                gameDirectory = file('build/run/settingsTest')
+                programArguments.addAll '--width', '1280', '--height', '720'
+            }
+        }
     }
 }
