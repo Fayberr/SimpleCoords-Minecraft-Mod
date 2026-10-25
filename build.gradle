@@ -11,11 +11,15 @@ base {
 }
 
 repositories {
+    mavenLocal()
+    maven { name = 'Shedaniel'; url = 'https://maven.shedaniel.me/' }
 	// Terraformers maven for ModMenu
 	maven { name = 'Terraformers'; url = 'https://maven.terraformersmc.com/' }
 }
 
 dependencies {
+    compileOnly "net.fayber:modern-config:1.9.5"
+    compileOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
@@ -59,4 +63,29 @@ publishing {
 			from components.java
 		}
 	}
+}
+
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "simplecoords-test"
+        enableGameTests = false
+        enableClientGameTests = true
+        eula = true
+    }
+}
+
+configurations.gametestCompileOnly.extendsFrom(configurations.compileOnly)
+dependencies { runtimeOnly "com.terraformersmc:modmenu:18.0.0" }
+if (project.hasProperty('testCloth') || project.hasProperty('testModernConfig')) {
+    dependencies { runtimeOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}" }
+}
+if (project.hasProperty('testModernConfig')) {
+    dependencies {
+        runtimeOnly "net.fayber:modern-config:1.9.5"
+        runtimeOnly "net.fayber:modern-gui:1.0.15"
+    }
+}
+loom.runs.named('clientGameTest') {
+    programArgs '--width', '1280', '--height', '720'
 }
