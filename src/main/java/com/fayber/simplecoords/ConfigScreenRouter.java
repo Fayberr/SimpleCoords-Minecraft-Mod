@@ -1,7 +1,7 @@
 package com.fayber.simplecoords;
 
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screens.Screen;
+import net.fabricmc.loader.api.FabricLoader;
 
 public final class ConfigScreenRouter {
     private ConfigScreenRouter() {}
@@ -9,6 +9,9 @@ public final class ConfigScreenRouter {
     public static Screen create(Screen parent) {
         if (FabricLoader.getInstance().isModLoaded("modernconfig")) {
             return ModernConfigIntegration.create(parent);
+        }
+        if (FabricLoader.getInstance().isModLoaded("cloth-config")) {
+            return ClothConfigIntegration.create(parent);
         }
         return new CustomConfigScreen(parent);
     }

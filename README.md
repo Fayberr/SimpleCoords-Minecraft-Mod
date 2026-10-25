@@ -36,7 +36,7 @@ A ModMenu config screen is available if ModMenu is installed.
 ## Building
 
 JDK 25, Gradle 9.7.0+, and a Minecraft 26.3 Fabric development environment.
-Publish Modern Config 1.9.4 for 26.3 to Maven local first (`1.9.4+26.3`).
+Publish Modern Config 1.9.5 for 26.3 to Maven local first (`1.9.5+26.3`).
 
 ```bash
 gradle build
@@ -67,3 +67,8 @@ such as `minecraft:oak_stairs`; states show properties such as `facing=north`.
 The target section hides when the crosshair does not hit a block within normal reach.
 Use the settings screen or `/simplecoords set show_target true` to toggle the section.
 The additional command options are `show_target_subchunk`, `show_target_type`, and `show_target_state`.
+
+## Settings libraries
+
+See [SETTINGS.md](SETTINGS.md) for optional Cloth Config and Modern Config support,
+screen priority and the `/simplecoords hud` drag-editor command.

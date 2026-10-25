@@ -66,17 +66,18 @@ public class SettingsClientTest implements FabricClientGameTest {
             check(!Config.data.show_biome, "biome command disables line");
             c.runOnClient(mc -> { Config.load(); check(!Config.data.show_biome, "biome preference persisted"); });
             command(c, "simplecoords config");
+            boolean cloth = net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("cloth-config");
             boolean modern = FabricLoader.getInstance().isModLoaded("modernconfig");
             c.runOnClient(mc -> {
                 check(mc.gui.screen() != null, "command opened screen");
                 check(mc.gui.screen().getClass().getName().equals(modern
                         ? "net.fayber.modernconfig.api.ModernConfigScreen"
-                        : CustomConfigScreen.class.getName()), "optional screen routing");
+                        : cloth ? "me.shedaniel.clothconfig2.gui.ClothConfigScreen" : CustomConfigScreen.class.getName()), "optional screen routing");
                 check(new SimpleCoordsModMenu().getModConfigScreenFactory().create(null).getClass()
                         .equals(mc.gui.screen().getClass()), "ModMenu uses same router");
             });
             c.takeScreenshot(modern ? "modern-settings" : "builtin-settings");
-            if (!modern) {
+            if (!modern && !cloth) {
                 c.runOnClient(mc -> {
                     var screen = mc.gui.screen();
                     for (var child : screen.children()) {
@@ -96,7 +97,7 @@ public class SettingsClientTest implements FabricClientGameTest {
                 c.takeScreenshot("editor-with-biome");
                 c.runOnClient(mc -> mc.gui.screen().onClose());
                 c.runOnClient(mc -> mc.gui.screen().onClose());
-            } else {
+            } else if (modern) {
                 // Exercise the actual screen's snapshot/Cancel and Save persistence paths.
                 c.runOnClient(mc -> { Config.data.show_biome = true; mc.gui.screen().onClose(); });
                 check(!Config.data.show_biome, "Modern Config cancel restores biome preference");
@@ -118,6 +119,8 @@ public class SettingsClientTest implements FabricClientGameTest {
                 c.getInput().releaseMouse(InputConstants.MOUSE_BUTTON_LEFT);
                 c.waitTicks(2);
                 c.runOnClient(mc -> { check(mc.gui.screen() == null, "Save click closed the screen"); Config.load(); check(Config.data.show_biome, "Modern Config save persists biome preference"); });
+            } else {
+                c.runOnClient(mc -> mc.gui.screen().onClose());
             }
             world.getServer().runCommand("setblock 0 79 0 minecraft:oak_stairs[facing=east]");
             world.getServer().runCommand("tp @p 0.5 81 0.5 0 90");

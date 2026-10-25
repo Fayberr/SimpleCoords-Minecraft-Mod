@@ -28,6 +28,7 @@
     "fabric-api": "*"
   },
   "suggests": {
-    "modernconfig": ">=1.9.4"
+    "modernconfig": ">=1.9.4",
+    "cloth-config": "*"
   }
 }
