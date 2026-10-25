@@ -40,3 +40,8 @@ The jar is in `build/libs/`.
 ## License
 
 GPL-3.0-or-later
+
+## Settings libraries
+
+See [SETTINGS.md](SETTINGS.md) for optional Cloth Config and Modern Config support,
+screen priority and the `/simplecoords hud` drag-editor command.

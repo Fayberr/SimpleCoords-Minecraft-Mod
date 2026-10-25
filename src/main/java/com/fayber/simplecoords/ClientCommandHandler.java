@@ -15,14 +15,20 @@ public class ClientCommandHandler {
                 ClientCommandManager.literal("simplecoords")
                     .executes(context -> {
                         MinecraftClient.getInstance().execute(() -> {
-                            MinecraftClient.getInstance().setScreen(new CustomConfigScreen(null));
+                            MinecraftClient.getInstance().setScreen(ConfigScreenRouter.create(null));
                         });
                         return 1;
                     })
+                    .then(ClientCommandManager.literal("hud")
+                        .executes(context -> {
+                            MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new HUDEditorScreen(null)));
+                            return 1;
+                        })
+                    )
                     .then(ClientCommandManager.literal("config")
                         .executes(context -> {
                             MinecraftClient.getInstance().execute(() -> {
-                                MinecraftClient.getInstance().setScreen(new CustomConfigScreen(null));
+                                MinecraftClient.getInstance().setScreen(ConfigScreenRouter.create(null));
                             });
                             return 1;
                         })
