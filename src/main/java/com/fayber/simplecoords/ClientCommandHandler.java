@@ -17,6 +17,12 @@ public class ClientCommandHandler {
                         Minecraft.getInstance().setScreen(ConfigScreenRouter.create(null));
                         return 1;
                     })
+                    .then(ClientCommandManager.literal("hud")
+                        .executes(context -> {
+                            Minecraft.getInstance().setScreen(new HUDEditorScreen(null));
+                            return 1;
+                        })
+                    )
                     .then(ClientCommandManager.literal("config")
                         .executes(context -> {
                             Minecraft.getInstance().setScreen(ConfigScreenRouter.create(null));

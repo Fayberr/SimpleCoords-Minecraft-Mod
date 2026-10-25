@@ -63,32 +63,37 @@ public class SettingsClientTest implements FabricClientGameTest {
             check(!Config.data.show_biome, "biome command disables line");
             c.runOnClient(mc -> { Config.load(); check(!Config.data.show_biome, "biome preference persisted"); });
             command(c, "simplecoords config");
+            boolean cloth = net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("cloth-config");
             c.runOnClient(mc -> {
                 check(mc.screen != null, "command opened screen");
-                check(mc.screen instanceof CustomConfigScreen, "built-in screen routing");
+                check(cloth ? mc.screen.getClass().getName().equals("me.shedaniel.clothconfig2.gui.ClothConfigScreen") : mc.screen instanceof CustomConfigScreen, "settings routing");
                 check(new SimpleCoordsModMenu().getModConfigScreenFactory().create(null).getClass()
                         .equals(mc.screen.getClass()), "ModMenu uses same router");
             });
-            c.takeScreenshot("builtin-settings");
-            c.runOnClient(mc -> {
-                var screen = mc.screen;
-                for (var child : screen.children()) {
-                    if (child instanceof AbstractWidget widget) {
-                        check(widget.getY() + widget.getHeight() <= screen.height, "settings control fits screen");
+            if (!cloth) {
+                c.takeScreenshot("builtin-settings");
+                c.runOnClient(mc -> {
+                    var screen = mc.screen;
+                    for (var child : screen.children()) {
+                        if (child instanceof AbstractWidget widget) {
+                            check(widget.getY() + widget.getHeight() <= screen.height, "settings control fits screen");
+                        }
                     }
-                }
-            });
-            c.clickScreenButton("Target Coordinates: OFF");
-            check(Config.data.show_target, "fallback target coordinates toggle");
-            c.clickScreenButton("Target Coordinates: ON");
-            check(!Config.data.show_target, "fallback target coordinates disables section");
-            c.clickScreenButton("Show Biome: OFF");
-            check(Config.data.show_biome, "fallback biome button enables line");
-            c.clickScreenButton("Edit HUD Position");
-            c.waitForScreen(HUDEditorScreen.class);
-            c.takeScreenshot("editor-with-biome");
-            c.runOnClient(mc -> mc.screen.onClose());
-            c.runOnClient(mc -> mc.screen.onClose());
+                });
+                c.clickScreenButton("Target Coordinates: OFF");
+                check(Config.data.show_target, "fallback target coordinates toggle");
+                c.clickScreenButton("Target Coordinates: ON");
+                check(!Config.data.show_target, "fallback target coordinates disables section");
+                c.clickScreenButton("Show Biome: OFF");
+                check(Config.data.show_biome, "fallback biome button enables line");
+                c.clickScreenButton("Edit HUD Position");
+                c.waitForScreen(HUDEditorScreen.class);
+                c.takeScreenshot("editor-with-biome");
+                c.runOnClient(mc -> mc.screen.onClose());
+                c.runOnClient(mc -> mc.screen.onClose());
+            } else {
+                c.runOnClient(mc -> mc.screen.onClose());
+            }
             world.getServer().runCommand("setblock 0 79 0 minecraft:oak_stairs[facing=east]");
             world.getServer().runCommand("tp @p 0.5 81 0.5 0 90");
             command(c, "simplecoords set show_target true");

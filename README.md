@@ -42,7 +42,7 @@ run Gradle itself with JDK 21 or newer.
 ./gradlew build
 ```
 
-The Java 21 jar is `build/libs/simplecoords-2.2.0+1.21.11.jar`.
+The Java 21 jar is `build/libs/simplecoords-2.2.1+1.21.11.jar`.
 
 Client regression tests require a display or Xvfb:
 
@@ -67,3 +67,8 @@ such as `minecraft:oak_stairs`; states show properties such as `facing=north`.
 The target section hides when the crosshair does not hit a block within normal reach.
 Use the settings screen or `/simplecoords set show_target true` to toggle the section.
 The additional command options are `show_target_subchunk`, `show_target_type`, and `show_target_state`.
+
+## Settings libraries
+
+See [SETTINGS.md](SETTINGS.md) for optional Cloth Config and Modern Config support,
+screen priority and the `/simplecoords hud` drag-editor command.
